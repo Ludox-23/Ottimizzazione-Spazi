@@ -1,0 +1,57 @@
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+// Struttura per memorizzare una disposizione e il numero di confezioni
+struct Configurazione {
+    int confezioni;  // Numero massimo di confezioni nella scatola
+    int L, P, A;     // Orientamento ottimale della confezione
+};
+
+// Funzione per calcolare il numero massimo di confezioni in una data configurazione
+int calcolaConfezioni(int L, int P, int A, int X, int Y, int Z) {
+    int nx = X / L;  // Quante confezioni lungo X
+    int ny = Y / P;  // Quante confezioni lungo Y
+    int nz = Z / A;  // Quante confezioni lungo Z
+    return nx * ny * nz;
+}
+
+int main() {
+    int L, P, A; // Dimensioni contenitore piccolo
+    int X, Y, Z; // Dimensioni contenitore grande
+
+    // Input delle dimensioni
+    cout<<" Benvenuto nel programma di LudoXcel: qui è possibile trovare la disposizione ottimale tra i diversi tipi di imballaggio";
+    cout << "Inserire le dimensioni del contenitore piccolo (L P A), da utilizzare le stesse unità di misura sia per il contenitore piccolo che per quello grande: ";
+    cin >> L >> P >> A;
+    cout << "Inserire le dimensioni del contenitore grande (X Y Z): ";
+    cin >> X >> Y >> Z;
+
+    // Array con le 6 possibili disposizioni (permuta delle dimensioni)
+    int permutazioni[6][3] = {
+        {L, P, A}, {L, A, P}, {P, L, A},
+        {P, A, L}, {A, L, P}, {A, P, L}
+    };
+
+    Configurazione migliore = {0, 0, 0, 0};
+
+    // Prova tutte le permutazioni per trovare la migliore disposizione
+    for (int i = 0; i < 6; i++) {
+        int numConfezioni = calcolaConfezioni(permutazioni[i][0], permutazioni[i][1], permutazioni[i][2], X, Y, Z);
+        
+        if (numConfezioni > migliore.confezioni) {
+            migliore.confezioni = numConfezioni;
+            migliore.L = permutazioni[i][0];
+            migliore.P = permutazioni[i][1];
+            migliore.A = permutazioni[i][2];
+        }
+    }
+
+    // Output della migliore configurazione
+    cout << "\nMigliore disposizione delle confezioni nella scatola grande:\n";
+    cout << "Orientamento ottimale: " << migliore.L << " x " << migliore.P << " x " << migliore.A << endl;
+    cout << "Numero massimo di confezioni inseribili: " << migliore.confezioni << endl;
+
+    return 0;
+}

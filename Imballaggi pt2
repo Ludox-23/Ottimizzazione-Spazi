@@ -1,0 +1,47 @@
+#include <iostream>
+
+using namespace std;
+
+// Funzione per calcolare il numero massimo di confezioni in una data configurazione
+int calcolaConfezioni(int L, int P, int A, int X, int Y, int Z) {
+    return (X / L) * (Y / P) * (Z / A);
+}
+
+int main() {
+    int L, P, A; // Dimensioni contenitore piccolo
+    int X, Y, Z; // Dimensioni contenitore grande
+
+    // Input delle dimensioni
+    cout << "Benvenuto nel programma di LudoXcel: qui è possibile trovare la disposizione ottimale tra i diversi tipi di imballaggio.\n";
+    cout << "Inserire le dimensioni del contenitore piccolo (L P A), usando la stessa unità di misura per entrambi i contenitori: ";
+    cin >> L >> P >> A;
+    cout << "Inserire le dimensioni del contenitore grande (X Y Z): ";
+    cin >> X >> Y >> Z;
+
+    // Array con le 6 possibili disposizioni (permuta delle dimensioni)
+    int permutazioni[6][3] = {
+        {L, P, A}, {L, A, P}, {P, L, A},
+        {P, A, L}, {A, L, P}, {A, P, L}
+    };
+
+    int maxConfezioni = 0, bestL = 0, bestP = 0, bestA = 0;
+
+    // Trova la configurazione migliore
+    for (int i = 0; i < 6; i++) {
+        int numConfezioni = calcolaConfezioni(permutazioni[i][0], permutazioni[i][1], permutazioni[i][2], X, Y, Z);
+        
+        if (numConfezioni > maxConfezioni) {
+            maxConfezioni = numConfezioni;
+            bestL = permutazioni[i][0];
+            bestP = permutazioni[i][1];
+            bestA = permutazioni[i][2];
+        }
+    }
+
+    // Output della migliore configurazione
+    cout << "\nMigliore disposizione delle confezioni nella scatola grande:\n";
+    cout << "Orientamento ottimale: " << bestL << " x " << bestP << " x " << bestA << endl;
+    cout << "Numero massimo di confezioni inseribili: " << maxConfezioni << endl;
+
+    return 0;
+}
